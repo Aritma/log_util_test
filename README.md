@@ -1,2 +1,4 @@
 # log_util_test
-RH log util test
+Log filter utility, created based on included `specification.txt` file.
+
+Read `specification.txt` for more info.
