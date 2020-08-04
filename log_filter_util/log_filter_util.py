@@ -1,8 +1,9 @@
 import argparse
 import sys
+import io
 
 
-def argument_parse(input_args):
+def argument_parse(input_args: list):
     parser = argparse.ArgumentParser(
         usage='%(prog)s [OPTION]... [FILE]',
     )
@@ -51,9 +52,26 @@ def print_results(lines: list):
         print(line)
 
 
+def get_data_content(args: argparse.Namespace):
+    if args.FILE is not None:
+        data_source = args.FILE
+    else:
+        data_source = sys.stdin
+
+    # Warning! This implementation is not memory effective for extreme file sizes
+    content = data_source.readlines()
+    if args.last is not None:
+        content = content[-args.last:]
+    elif args.first is not None:
+        content = content[:args.first]
+    return content
+
+
 def main():
-    argument_parse(sys.argv[1:])
-    print_results(['test'])
+    args = argument_parse(sys.argv[1:])
+
+    for line in get_data_content(args):
+        print(line.strip('\n'))
 
 
 if __name__ == '__main__':

@@ -8,11 +8,6 @@ import log_filter_util.log_filter_util
 
 class OutputTest(unittest.TestCase):
 
-    def test_main_method_should_print_string_to_stdout(self):
-        with patch('sys.stdout', new=StringIO()) as output_value:
-            log_filter_util.log_filter_util.main()
-            self.assertEqual(output_value.getvalue(), 'test\n')
-
     # Argument parsing tests because args are defined in specification
     def test_argument_parse_method_should_set_value_for_first_if_provided_in_short_variant(self):
         self.assertEqual(
