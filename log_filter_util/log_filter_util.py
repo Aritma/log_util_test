@@ -1,4 +1,5 @@
 import argparse
+import re
 import sys
 import io
 
@@ -65,6 +66,12 @@ def get_data_content(args: argparse.Namespace):
     elif args.first is not None:
         content = content[:args.first]
     return content
+
+
+def contains_timestamp(line: str):
+    if re.search('([0-1][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])', line):
+        return True
+    return False
 
 
 def main():

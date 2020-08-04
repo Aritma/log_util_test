@@ -79,6 +79,7 @@ class OutputTest(unittest.TestCase):
             log_filter_util.log_filter_util.argument_parse(['--timestamps']).timestamps, True
         )
 
+    # get_data_content function tests
     def test_data_content_should_equal_to_lines_of_stdin_if_provided(self):
         with patch('sys.stdin', new=StringIO('1\n2\n3\n')):
             self.assertEqual(
@@ -98,6 +99,19 @@ class OutputTest(unittest.TestCase):
         )
         file.close()
         os.remove(filename)
+
+    # contains_timestamp function tests
+    def test_contains_timestamp_should_return_true_if_timestamp_00_00_00_exists_in_line(self):
+        self.assertTrue(log_filter_util.log_filter_util.contains_timestamp('00:00:00-TEST'))
+
+    def test_contains_timestamp_should_return_true_if_timestamp_23_59_59_exists_in_line(self):
+        self.assertTrue(log_filter_util.log_filter_util.contains_timestamp('TEST23:59:59TEST'))
+
+    def test_contains_timestamp_should_return_false_if_invalid_timestamp_exists_in_line(self):
+        self.assertFalse(log_filter_util.log_filter_util.contains_timestamp('24:30:61-TEST'))
+
+    def test_contains_timestamp_should_return_false_if_timestamp_do_not_exists_in_line(self):
+        self.assertFalse(log_filter_util.log_filter_util.contains_timestamp('TEST-TEST'))
 
 
 if __name__ == '__main__':
