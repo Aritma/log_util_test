@@ -113,6 +113,22 @@ class OutputTest(unittest.TestCase):
     def test_contains_timestamp_should_return_false_if_timestamp_do_not_exists_in_line(self):
         self.assertFalse(log_filter_util.log_filter_util.contains_timestamp('TEST-TEST'))
 
+    # get_ipv4_part tests
+    def test_get_ipv4_part_should_return_ipv4_string_if_valid_address_exists_in_mid_of_line(self):
+        self.assertEqual(log_filter_util.log_filter_util.get_ipv4_part('TEST10.20.30.40TEST'), '10.20.30.40')
+
+    def test_get_ipv4_part_should_return_ipv4_string_if_valid_address_exists_at_start_of_line(self):
+        self.assertEqual(log_filter_util.log_filter_util.get_ipv4_part('10.20.30.40TEST'), '10.20.30.40')
+
+    def test_get_ipv4_part_should_return_ipv4_string_if_valid_address_exists_in_end_of_line(self):
+        self.assertEqual(log_filter_util.log_filter_util.get_ipv4_part('TEST10.20.30.40'), '10.20.30.40')
+
+    def test_get_ipv4_part_should_return_none_if_invalid_address_exists_in_line(self):
+        self.assertEqual(log_filter_util.log_filter_util.get_ipv4_part('TEST10.20.30.400'), None)
+
+    def test_get_ipv4_part_should_return_none_if_no_address_exists_in_line(self):
+        self.assertEqual(log_filter_util.log_filter_util.get_ipv4_part('TEST-TEST'), None)
+
 
 if __name__ == '__main__':
     unittest.main()

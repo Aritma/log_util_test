@@ -74,6 +74,18 @@ def contains_timestamp(line: str):
     return False
 
 
+def get_ipv4_part(line: str):
+    found = re.search("(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.){3}"
+                      "(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])([^0-9]|$)", line)
+    if found:
+        # Mid-line results have an additional non-digit character included
+        if found.group(0)[-1].isdigit():
+            return found.group(0)
+        else:
+            return found.group(0)[:-1]
+    return None
+
+
 def main():
     args = argument_parse(sys.argv[1:])
 
