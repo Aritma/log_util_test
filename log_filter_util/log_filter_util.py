@@ -86,6 +86,14 @@ def get_ipv4_part(line: str):
     return None
 
 
+def get_ipv6_part(line: str):
+    # standard notation only
+    found = re.search('(?:[a-fA-F0-9]{1,4}:){7}[a-fA-F0-9]{1,4}', line)
+    if found:
+        return found.group(0)
+    return None
+
+
 def main():
     args = argument_parse(sys.argv[1:])
 

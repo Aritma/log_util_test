@@ -129,6 +129,32 @@ class OutputTest(unittest.TestCase):
     def test_get_ipv4_part_should_return_none_if_no_address_exists_in_line(self):
         self.assertEqual(log_filter_util.log_filter_util.get_ipv4_part('TEST-TEST'), None)
 
+    # get_ipv6_part tests
+    def test_get_ipv6_part_should_return_ipv6_string_if_valid_address_with_noncapitals_exists_in_line(self):
+        self.assertEqual(log_filter_util.log_filter_util.get_ipv6_part(
+            'TEST-2001:0db8:85a3:0000:0000:8a2e:0370:7334-TEST'), '2001:0db8:85a3:0000:0000:8a2e:0370:7334'
+        )
+
+    def test_get_ipv6_part_should_return_ipv6_string_if_valid_address_with_capitals_exists_in_line(self):
+        self.assertEqual(log_filter_util.log_filter_util.get_ipv6_part(
+            'TEST-2001:0DB8:85A3:0000:0000:8A2E:0370:7334-TEST'), '2001:0DB8:85A3:0000:0000:8A2E:0370:7334'
+        )
+
+    def test_get_ipv6_part_should_return_none_if_invalid_address_exists_in_line(self):
+        self.assertEqual(log_filter_util.log_filter_util.get_ipv6_part(
+            'TEST-2001:0DB8:WXYZ:0000:0000:8A2E:0370:7334-TEST'), None
+        )
+
+    def test_get_ipv6_part_should_return_none_if_no_address_exists_in_line(self):
+        self.assertEqual(log_filter_util.log_filter_util.get_ipv6_part(
+            'TEST-TEST'), None
+        )
+
+    def test_get_ipv6_part_should_return_none_if_non_standard_address_exists_in_line(self):
+        self.assertEqual(log_filter_util.log_filter_util.get_ipv6_part(
+            'TEST-2001:DB8:WXYZ::8A2E:370:7334-TEST'), None
+        )
+
 
 if __name__ == '__main__':
     unittest.main()
