@@ -1,7 +1,8 @@
 import argparse
+import sys
 
 
-def argument_parse():
+def argument_parse(input_args):
     parser = argparse.ArgumentParser(
         usage='%(prog)s [OPTION]... [FILE]',
     )
@@ -42,8 +43,7 @@ def argument_parse():
         help='Print lines that contain an IPv6 address (standard notation), matching IPs are highlighted'
     )
 
-    args = parser.parse_args()
-    return args
+    return parser.parse_args(input_args)
 
 
 def print_results(lines: list):
@@ -52,7 +52,7 @@ def print_results(lines: list):
 
 
 def main():
-    argument_parse()
+    argument_parse(sys.argv[1:])
     print_results(['test'])
 
 
