@@ -79,6 +79,26 @@ class OutputTest(unittest.TestCase):
             log_filter_util.log_filter_util.argument_parse(['--timestamps']).timestamps, True
         )
 
+    def test_data_content_should_equal_to_lines_of_stdin_if_provided(self):
+        with patch('sys.stdin', new=StringIO('1\n2\n3\n')):
+            self.assertEqual(
+                log_filter_util.log_filter_util.get_data_content(
+                    log_filter_util.log_filter_util.argument_parse([])
+                ), ['1\n', '2\n', '3\n']
+            )
+
+    def test_data_content_should_equal_to_lines_of_file_if_provided(self):
+        filename = 'testfile'
+        with open(filename, 'w') as f:
+            f.write('1\n2\n3\n')
+        args = log_filter_util.log_filter_util.argument_parse([filename])
+        file = args.FILE
+        self.assertEqual(
+            log_filter_util.log_filter_util.get_data_content(args), ['1\n', '2\n', '3\n']
+        )
+        file.close()
+        os.remove(filename)
+
 
 if __name__ == '__main__':
     unittest.main()
