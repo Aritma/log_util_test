@@ -47,11 +47,6 @@ def argument_parse(input_args: list):
     return parser.parse_args(input_args)
 
 
-def print_results(lines: list):
-    for line in lines:
-        print(line)
-
-
 def get_data_content(args: argparse.Namespace):
     if args.FILE is not None:
         data_source = args.FILE
