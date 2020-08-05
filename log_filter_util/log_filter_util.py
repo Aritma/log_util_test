@@ -7,7 +7,6 @@ def argument_parse(input_args: list):
     parser = argparse.ArgumentParser(
         usage='%(prog)s [OPTION]... [FILE]',
     )
-
     exclusive_args = parser.add_mutually_exclusive_group()
     exclusive_args.add_argument(
         '-f', '--first',
@@ -43,7 +42,6 @@ def argument_parse(input_args: list):
         action='store_true',
         help='Print lines that contain an IPv6 address (standard notation), matching IPs are highlighted'
     )
-
     return parser.parse_args(input_args)
 
 
@@ -93,30 +91,33 @@ def get_ipv6_part(line: str):
     return None
 
 
+def filter_line(args: argparse.Namespace, line: str):
+    output = line
+    if args.timestamps:
+        if not contains_timestamp(output):
+            return None
+    if args.ipv4:
+        ipv4str = get_ipv4_part(output)
+        if ipv4str is not None:
+            output = output.replace(ipv4str, '\033[4m{}\033[0m'.format(ipv4str))
+        else:
+            return None
+    if args.ipv6:
+        ipv6str = get_ipv6_part(output)
+        if ipv6str is not None:
+            output = output.replace(ipv6str, '\033[4m{}\033[0m'.format(ipv6str))
+        else:
+            return None
+    return output
+
+
 def main():
     args = argument_parse(sys.argv[1:])
 
     for line in get_data_content(args):
-        output = line
-        if args.timestamps:
-            if not contains_timestamp(output):
-                continue
-
-        if args.ipv4:
-            ipv4str = get_ipv4_part(output)
-            if ipv4str is not None:
-                output = output.replace(ipv4str, '\033[4m{}\033[0m'.format(ipv4str))
-            else:
-                continue
-
-        if args.ipv6:
-            ipv6str = get_ipv6_part(output)
-            if ipv6str is not None:
-                output = output.replace(ipv6str, '\033[4m{}\033[0m'.format(ipv6str))
-            else:
-                continue
-
-        print(output, end='')
+        output = filter_line(args, line)
+        if output is not None:
+            print(output, end='')
 
 
 if __name__ == '__main__':
